@@ -1,0 +1,29 @@
+/* Standalone container styles for SPACExPRO (local edition).
+   Unlike the Muse host, a normal browser page scrolls the DOCUMENT,
+   so the mount point is a plain block — never position:fixed — which
+   keeps native scrolling, the iOS/Android address-bar resize behaviour
+   and pull-to-refresh working exactly as visitors expect. */
+:root {
+  color-scheme: dark;
+  --twsa-safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --twsa-safe-area-inset-right: env(safe-area-inset-right, 0px);
+  --twsa-safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --twsa-safe-area-inset-left: env(safe-area-inset-left, 0px);
+}
+html,
+body,
+[data-generated-space-root] {
+  min-height: 100%;
+}
+[data-generated-space-root] {
+  display: block;
+  width: 100%;
+}
+.hatch-space-root {
+  box-sizing: border-box;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: var(--bg, #030304);
+  color: var(--text, #fffdf5);
+}

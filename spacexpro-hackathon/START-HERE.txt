@@ -1,0 +1,49 @@
+SPACExPRO HACKATHON — QUICK START
+==================================
+
+This package runs on Windows, macOS and Linux. You only need Bun.
+
+1) INSTALL BUN (one time)
+   - Windows: open PowerShell and run the installer from https://bun.sh
+   - Mac / Linux: open Terminal and run the installer from https://bun.sh
+   Close and reopen the terminal afterwards, then check:  bun --version
+
+2) EXTRACT this ZIP, then open a terminal INSIDE the extracted
+   "spacexpro-hackathon" folder (the folder with package.json in it).
+   - Windows: open the folder in Explorer, click the address bar,
+     type  powershell  and press Enter.
+   - Mac: right-click the folder in Finder > Services >
+     "New Terminal at Folder" (or open Terminal and `cd` to it).
+
+3) INSTALL + RUN (same commands on every OS)
+       bun install
+       bun run dev
+
+4) OPEN THE SITE
+       http://localhost:3000
+   Stop the server any time with Ctrl+C.
+
+TEST IT ON YOUR PHONE (iPhone or Android, same Wi-Fi as the computer)
+   Run the server with HOST set to 0.0.0.0:
+   - Windows PowerShell:   $env:HOST="0.0.0.0"; bun run dev
+   - Mac / Linux:          HOST=0.0.0.0 bun run dev
+   Then on the phone open  http://<your-computer-IP>:3000
+   (Windows: `ipconfig` shows the IPv4 address. Mac: System Settings >
+   Wi-Fi > Details shows the IP address.)
+
+FIRST THINGS TO TRY
+   - Register a team on the Register page — you will get a team code
+     and an SPX- reference on the success poster.
+   - Sign in through Team Portal with the e-mail + password you used.
+   - Organizer area: use the "Organizer sign-in" link in the footer.
+     The first time, choose "Create the owner account here".
+
+GOOD TO KNOW
+   - Your data is stored in a local file, app.db, created automatically.
+     Delete app.db to start again with an empty database.
+   - E-mails stay "pending" in the Organizer outbox in local runs —
+     there is no Gmail connection on a personal computer, and the app
+     never pretends an e-mail was sent when it was not.
+   - Payments show "Pending Verification" until an organizer verifies
+     a UPI reference / UTR — Razorpay is not connected yet.
+   - Full details, project layout and Razorpay steps: README.md

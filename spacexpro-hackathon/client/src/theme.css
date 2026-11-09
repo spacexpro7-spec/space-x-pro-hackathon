@@ -1,0 +1,1001 @@
+@import "tailwindcss";
+@import "tailwindcss-safe-area";
+
+@theme {
+  --text-xs: 12px;
+  --text-xs--line-height: 16px;
+  --text-sm: 14px;
+  --text-sm--line-height: 20px;
+  --text-base: 16px;
+  --text-base--line-height: 24px;
+  --text-lg: 18px;
+  --text-lg--line-height: 28px;
+  --text-xl: 20px;
+  --text-xl--line-height: 28px;
+  --text-2xl: 24px;
+  --text-2xl--line-height: 32px;
+  --text-3xl: 30px;
+  --text-3xl--line-height: 36px;
+  --text-4xl: 36px;
+  --text-4xl--line-height: 40px;
+  --text-5xl: 48px;
+  --text-5xl--line-height: 52px;
+  --text-6xl: 60px;
+  --text-6xl--line-height: 62px;
+  --text-7xl: 72px;
+  --text-7xl--line-height: 74px;
+  --font-display: "Syne", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-letter: "Syne", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+  --bg: #030304;
+  --surface: #070708;
+  --surface2: #0A0A0B;
+  --surface3: #0E0E10;
+  --text: #FFFDF5;
+  --dim: #F0E7CE;
+  --muted: #D8CBA6;
+  --border: #3A2F16;
+  --accent: #FFD700;
+  --accent2: #F5C542;
+  --molten: #FFD700;
+  --molten-deep: #AA771C;
+  --rosegold: #E8A87C;
+  --champagne: #FCF6BA;
+  --champagne-soft: #F5E6A8;
+  --antique: #BF953F;
+  --platinum: #F2EFE6;
+  --ink: #030304;
+  --good: #F5C542;
+  --bad: #FF8F7D;
+  --gold: #FFD700;
+  --gold-bright: #F5C542;
+  --gold-pale: #FCF6BA;
+  --gold-deep: #AA771C;
+  --radius: 8px;
+  --sv: 0;
+  --sp: 0;
+  --space-surface: var(--surface);
+  --space-surface-alt: var(--surface2);
+  --space-muted: var(--muted);
+  --space-border: var(--border);
+  --space-accent: var(--accent);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; overflow-x: clip; }
+body {
+  background:
+    radial-gradient(115% 85% at 50% 42%, transparent 58%, rgba(0, 0, 0, 0.52) 100%),
+    radial-gradient(900px 520px at 50% -12%, rgba(245,197,66, 0.05), transparent 58%),
+    radial-gradient(1100px 620px at 88% -8%, rgba(245,197,66, 0.025), transparent 62%),
+    radial-gradient(900px 560px at -10% 18%, rgba(252,246,186, 0.05), transparent 60%),
+    radial-gradient(760px 520px at 104% 58%, rgba(255,215,0, 0.03), transparent 62%),
+    radial-gradient(820px 560px at -8% 82%, rgba(245,197,66, 0.03), transparent 60%),
+    linear-gradient(180deg, #030304 0%, #070708 34%, #0A0A0B 68%, #030304 100%);
+  background-attachment: fixed;
+  color: var(--text); font-family: var(--font-sans); font-size: 16px; line-height: 1.6; overflow-x: clip;
+}
+::selection { background: #F5C542; color: #0A0A0A; }
+/* Syne display face: bold, wide, futuristic. Loaded at 600/700/800;
+   the Inter / system sans fallback keeps the same bold voice if the
+   webfont never arrives, so typography never depends on a network fetch.
+   Syne has no italic — the secondary headline line is upright Syne 700. */
+.font-display { font-family: var(--font-display); }
+/* Upright Syne accent for the secondary headline line. */
+.display-italic { font-family: var(--font-display); font-style: normal; font-weight: 700; letter-spacing: -0.01em; }
+
+/* ---------- Futuristic ambience: layered nebula colour fields + grain + pointer glow ---------- */
+.nebula {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  background:
+    radial-gradient(760px 480px at 86% 108%, rgba(245,197,66, 0.07), transparent 62%),
+    radial-gradient(680px 460px at 4% 96%, rgba(255,215,0, 0.06), transparent 60%);
+}
+.nebula::before, .nebula::after {
+  content: ""; position: absolute; border-radius: 9999px; filter: blur(90px); will-change: transform, opacity;
+}
+.nebula::before {
+  width: 54vw; height: 54vw; left: -12vw; top: -10vh;
+  background: radial-gradient(circle at 35% 35%, rgba(245,197,66, 0.06), rgba(255,215,0, 0.05) 48%, transparent 66%);
+  animation: nebula-drift 26s ease-in-out infinite alternate;
+}
+.nebula::after {
+  width: 48vw; height: 48vw; right: -14vw; top: 34vh;
+  background: radial-gradient(circle at 60% 40%, rgba(255,215,0, 0.05), rgba(245,197,66, 0.05) 46%, transparent 66%);
+  animation: nebula-drift 32s ease-in-out infinite alternate-reverse;
+}
+@keyframes nebula-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); opacity: 0.85; }
+  to { transform: translate3d(6vw, 5vh, 0) scale(1.12); opacity: 1; }
+}
+
+/* Hero gold mesh: molten gold / champagne / rose-gold fields that drift
+   and lean subtly toward the pointer via --hx/--hy (set by the hero). */
+.aurora-mesh {
+  position: absolute; inset: -12% -6% 0 -6%; z-index: 0; pointer-events: none; overflow: hidden;
+  background:
+    radial-gradient(58% 52% at 78% 18%, rgba(255,215,0, 0.07), transparent 62%),
+    radial-gradient(46% 44% at 18% 8%, rgba(245,197,66, 0.07), transparent 64%),
+    radial-gradient(42% 40% at 88% 72%, rgba(255,215,0, 0.08), transparent 64%),
+    radial-gradient(38% 36% at 8% 78%, rgba(245,197,66, 0.07), transparent 64%),
+    radial-gradient(30% 26% at 52% 42%, rgba(245,197,66, 0.04), transparent 68%);
+  filter: blur(28px) saturate(1.05);
+  animation: aurora-drift 18s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes aurora-drift {
+  from { transform: translate3d(calc(var(--hx, 0) * 22px), calc(var(--hy, 0) * 14px), 0) scale(1); }
+  to { transform: translate3d(calc(var(--hx, 0) * 22px + 2.5%), calc(var(--hy, 0) * 14px - 2%), 0) scale(1.08); }
+}
+.aurora-band {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 2px; z-index: 2; pointer-events: none;
+  background: linear-gradient(90deg, transparent, #FFD700 18%, #F5C542 42%, #FFD700 62%, #E8A87C 82%, transparent);
+  opacity: 0.85; box-shadow: 0 0 24px rgba(245,197,66, 0.55), 0 0 34px rgba(245,197,66, 0.35);
+}
+.aurora-horizon {
+  position: absolute; left: 50%; bottom: -140px; width: min(880px, 120vw); height: 280px; z-index: 0; pointer-events: none;
+  transform: translateX(-50%); border-radius: 9999px;
+  background: radial-gradient(ellipse at center, rgba(245,197,66, 0.05), rgba(255,215,0, 0.02) 45%, transparent 70%);
+  filter: blur(24px);
+}
+
+/* Liquid-gold gradient headline accent: bronze → antique → bright gold →
+   champagne → cool platinum → rose-gold in upright Syne 800, flowing
+   continuously (gold-liquid) with a soft gold halo so the word lifts
+   off the near-black background. */
+.headline-gradient {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  background: linear-gradient(92deg, #AA771C 0%, #BF953F 16%, #FFD700 32%, #F5C542 44%, #FCF6BA 50%, #F2EFE6 56%, #E8A87C 64%, #FFD700 80%, #AA771C 100%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 16px rgba(245, 197, 66, 0.32));
+  animation: gold-liquid 5s ease-in-out infinite;
+}
+@keyframes gold-liquid {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes gradient-shift {
+  from { background-position: 0% 50%; }
+  to { background-position: 100% 50%; }
+}
+@keyframes gold-shine {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.gold-flow, .gold-sheen {
+  position: relative; isolation: isolate;
+  background-image:
+    linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.38) 47%, rgba(252, 246, 186, 0.60) 50%, rgba(255, 255, 255, 0.38) 53%, transparent 60%),
+    linear-gradient(100deg, #AA771C, #FFD700 28%, #F5C542 46%, #FCF6BA 52%, #F2EFE6 58%, #E8A87C 64%, #FFD700 82%, #AA771C);
+  background-size: 300% 100%, 280% 100%;
+  animation: gold-flow 3.6s ease-in-out infinite;
+}
+@keyframes gold-flow {
+  0% { background-position: 110% 50%, 0% 50%; }
+  50% { background-position: -10% 50%, 100% 50%; }
+  100% { background-position: 110% 50%, 0% 50%; }
+}
+/* Header nav pills — Home / Register / Team Portal. Every pill carries
+   the travelling gold highlight as a BACKGROUND layer (never an overlay,
+   so the label is never washed out). The band is deliberately WIDE and
+   bright (28%–72% of a 200%-wide background, peak champagne 0.85) and
+   travels on its own nav-gold-flow keyframes that only ever move the
+   background between 0% and 100%: at 200% size that keeps some part of
+   the bright band inside the pill at every point of the 3s cycle — the
+   old gold-flow keyframes (300% background, 110% → −10%) spent most of
+   each cycle with the narrow band off-element, so Register / Team Portal
+   read as uniformly dark in still captures. --sd staggers each pill by
+   at most 0.45s per step, so no pill sits dark for seconds. A dark
+   text-shadow keeps the light label legible while the band passes under
+   it. The active pill swaps the dark base layer for the flowing 9-stop
+   gold fill, with the same 200% sheen size so its band stays visible. */
+@keyframes nav-gold-flow {
+  0% { background-position: 0% 50%, 0% 50%; }
+  50% { background-position: 100% 50%, 100% 50%; }
+  100% { background-position: 0% 50%, 0% 50%; }
+}
+.nav-btn {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 2.75rem;
+  border: 1px solid rgba(255, 215, 0, 0.30); border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  font-family: var(--font-letter); font-size: 14px; font-weight: 700; letter-spacing: 0.05em;
+  color: var(--dim);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+  background-image:
+    linear-gradient(105deg, transparent 28%, rgba(245, 197, 66, 0.55) 40%, rgba(252, 246, 186, 0.85) 50%, rgba(245, 197, 66, 0.55) 60%, transparent 72%),
+    linear-gradient(180deg, rgba(10, 10, 11, 0.92), rgba(3, 3, 4, 0.92));
+  background-size: 200% 100%, auto;
+  animation: nav-gold-flow 3s ease-in-out infinite;
+  animation-delay: var(--sd, 0s);
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+.nav-btn:hover { color: #F5C542; border-color: rgba(255, 215, 0, 0.65); }
+.nav-btn.is-active {
+  border-color: rgba(255, 215, 0, 0.75); color: #0A0A0A; text-shadow: none;
+  background-image:
+    linear-gradient(105deg, transparent 28%, rgba(255, 255, 255, 0.55) 40%, rgba(252, 246, 186, 0.85) 50%, rgba(255, 255, 255, 0.55) 60%, transparent 72%),
+    linear-gradient(100deg, #AA771C, #FFD700 28%, #F5C542 46%, #FCF6BA 52%, #F2EFE6 58%, #E8A87C 64%, #FFD700 82%, #AA771C);
+  background-size: 200% 100%, 280% 100%;
+  box-shadow: 0 8px 26px rgba(245, 197, 66, 0.35), 0 0 0 1px rgba(245, 197, 66, 0.25);
+}
+/* Pulsing glow ring around the primary CTA (wrapper outside the button,
+   so the button's own overflow:hidden sweep is never clipped). */
+.cta-pulse-wrap { position: relative; display: inline-flex; }
+.cta-pulse-wrap::before {
+  content: ""; position: absolute; inset: -6px; border-radius: 9999px; pointer-events: none;
+  border: 1px solid rgba(255, 215, 0, 0.65);
+  box-shadow: 0 0 24px rgba(255, 215, 0, 0.35);
+  animation: cta-ring 2.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+@keyframes cta-ring {
+  0% { transform: scale(0.96); opacity: 0.9; }
+  70% { transform: scale(1.14); opacity: 0; }
+  100% { transform: scale(1.14); opacity: 0; }
+}
+/* Slow gold aurora ribbon sweeping behind the hero. */
+.aurora-ribbon {
+  position: absolute; left: -20%; right: -20%; top: 38%; height: 100px; z-index: 0; pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.05), rgba(252, 246, 186, 0.07), rgba(232, 168, 124, 0.05), transparent);
+  filter: blur(26px);
+  transform: rotate(-7deg);
+  animation: ribbon-sweep 16s ease-in-out infinite alternate;
+}
+@keyframes ribbon-sweep {
+  from { transform: rotate(-7deg) translateX(-4%); opacity: 0.7; }
+  to { transform: rotate(-4deg) translateX(4%); opacity: 1; }
+}
+/* Floating gold dust rising through the hero. */
+.gold-dust { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.gold-dust span {
+  position: absolute; bottom: -12px; border-radius: 9999px; display: block;
+  background: radial-gradient(circle, #FCF6BA, #FFD700 55%, transparent 75%);
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
+  opacity: 0;
+  animation: dust-rise linear infinite;
+}
+@keyframes dust-rise {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  12% { opacity: 0.6; }
+  55% { opacity: 0.5; }
+  100% { transform: translateY(-78vh) translateX(18px); opacity: 0; }
+}
+/* Light-sweep divider between sections: a thin gold line that ignites
+   (scales in from the centre with a glow) as it scrolls into view —
+   driven by the existing .reveal / .is-visible observer. */
+.light-divider { height: 1px; position: relative; background: linear-gradient(90deg, transparent, rgba(245, 197, 66, 0.16), transparent); }
+.light-divider::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, #FFD700, #FCF6BA, #FFD700, transparent);
+  box-shadow: 0 0 18px rgba(255, 215, 0, 0.6);
+  transform: scaleX(0); transform-origin: center;
+  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.light-divider.is-visible::after { transform: scaleX(1); }
+.planet-gold { animation: gold-pulse 6s ease-in-out infinite; }
+@keyframes gold-pulse {
+  0%, 100% { box-shadow: 0 0 50px rgba(245,197,66, 0.28), 0 0 32px rgba(252,246,186, 0.22); }
+  50% { box-shadow: 0 0 70px rgba(232,168,124, 0.38), 0 0 44px rgba(252,246,186, 0.32); }
+}
+.hero-chip {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  border: 1px solid rgba(255,215,0, 0.55); border-radius: 9999px;
+  background: linear-gradient(120deg, rgba(13,13,13, 0.92), rgba(22,22,22, 0.88) 55%, rgba(22,22,22, 0.92));
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  padding: 0.55rem 0.9rem; font-family: var(--font-letter); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase; color: #FFFDF5; white-space: nowrap;
+  box-shadow: 0 8px 26px rgba(255,215,0, 0.22);
+}
+.hero-chip i { font-style: normal; color: var(--rosegold); }
+.glass-chip {
+  position: absolute; z-index: 3; pointer-events: none;
+  border: 1px solid rgba(255,215,0, 0.95); border-radius: 9999px;
+  background: linear-gradient(120deg, rgba(13,13,13, 0.80), rgba(16,16,16, 0.68));
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 14px 34px rgba(0,0,0, 0.18), 0 0 0 1px rgba(245,197,66, 0.18), 0 0 26px rgba(255,215,0, 0.28);
+  padding: 0.45rem 0.8rem; font-family: var(--font-letter); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase; color: #FFFDF5; white-space: nowrap;
+  animation: float-chip 6.5s ease-in-out infinite;
+}
+.glass-chip b { color: #F5C542; font-weight: 600; }
+.glass-chip--rose b { color: #FCF6BA; }
+.glass-chip--2 { animation-delay: 1.4s; animation-duration: 7.5s; }
+@keyframes float-chip {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
+}
+.countdown-tile {
+  background: linear-gradient(160deg, #070708, #0A0A0B 52%, #0E0E10);
+  border: 1px solid rgba(245,197,66, 0.65) !important;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(255,215,0, 0.28), inset 0 1px 0 rgba(252,246,186, 0.22);
+}
+.scroll-cue { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--muted); }
+.scroll-cue-line { width: 1px; height: 34px; overflow: hidden; background: rgba(252,246,186, 0.22); position: relative; }
+.scroll-cue-line::after {
+  content: ""; position: absolute; left: 0; top: -50%; width: 100%; height: 50%;
+  background: linear-gradient(180deg, transparent, #E8A87C, #E8A87C);
+  animation: scroll-cue-drop 1.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+@keyframes scroll-cue-drop {
+  from { top: -50%; } to { top: 110%; }
+}
+
+.tint-tracks {
+  background: linear-gradient(180deg, #070708 0%, #030304 100%);
+}
+.tint-sand {
+  background: linear-gradient(180deg, #0E0E10 0%, #030304 100%);
+}
+.tint-prize {
+  background: linear-gradient(180deg, #070708 0%, #030304 100%);
+}
+.tint-warm {
+  background:
+    radial-gradient(720px 280px at 16% 0%, rgba(245,197,66, 0.22), transparent 65%),
+    radial-gradient(620px 260px at 88% 0%, rgba(252,246,186, 0.20), transparent 60%);
+}
+.tint-peach {
+  background: linear-gradient(180deg, #070708 0%, #030304 55%, transparent 100%);
+}
+.grain {
+  position: fixed; inset: -50%; z-index: 80; pointer-events: none; opacity: 0.05; mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
+  animation: grain-shift 1.4s steps(4) infinite;
+}
+@keyframes grain-shift {
+  0% { transform: translate3d(0, 0, 0); } 25% { transform: translate3d(-1.5%, 1%, 0); }
+  50% { transform: translate3d(1%, -1.5%, 0); } 75% { transform: translate3d(-1%, -1%, 0); } 100% { transform: translate3d(0, 0, 0); }
+}
+.pointer-glow {
+  position: fixed; z-index: 1; width: 520px; height: 520px; left: 0; top: 0;
+  margin: -260px 0 0 -260px; border-radius: 9999px; pointer-events: none;
+  background: radial-gradient(circle, rgba(245,197,66, 0.07), rgba(255,215,0, 0.03) 38%, rgba(245,197,66, 0.02) 52%, transparent 68%);
+  will-change: transform; opacity: 0; transition: opacity 0.6s ease;
+}
+.pointer-glow.is-on { opacity: 1; }
+
+/* Syne lettering: bold, wide-tracked, uppercase labels, meta lines
+   and numerals — replaces the old mono utility face. */
+.kicker {
+  font-family: var(--font-letter);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent2);
+}
+.kicker::before {
+  content: "";
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  margin-right: 10px;
+  vertical-align: middle;
+  background: var(--accent2);
+}
+/* Syne headline: bold, high-impact, tight-tracked. Phone sizes stay
+   inside the viewport: the hero clamp and section sizes below were
+   checked at 360px. */
+.headline {
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  font-weight: 800;
+}
+@media (max-width: 480px) {
+  .headline { letter-spacing: -0.01em; line-height: 1.06; }
+}
+.sharp { border-radius: 6px; }
+
+/* ---------- Clip-masked headline reveals ---------- */
+.mask { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.mask-line {
+  display: block; transform: translateY(112%) rotate(2.5deg); transform-origin: left top;
+  transition: transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.mask-line.is-in { transform: translateY(0) rotate(0deg); }
+.mask-line-d1 { transition-delay: 0.08s; }
+.mask-line-d2 { transition-delay: 0.18s; }
+.mask-line-d3 { transition-delay: 0.28s; }
+.mask-line-d4 { transition-delay: 0.38s; }
+
+/* View + tab entrances (transform/opacity only) */
+.view-enter { animation: view-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes view-in { from { opacity: 0; transform: translateY(26px); clip-path: inset(0 0 18% 0); } to { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0 0); } }
+.tab-enter { animation: tab-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes tab-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Scroll reveals — only armed by JS, so content is fully visible if JS fails */
+.reveal-armed .reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal-armed .reveal.is-visible { opacity: 1; transform: translateY(0); }
+.reveal-armed .reveal-d1 { transition-delay: 0.08s; }
+.reveal-armed .reveal-d2 { transition-delay: 0.16s; }
+.reveal-armed .reveal-d3 { transition-delay: 0.24s; }
+.reveal-armed .reveal-d4 { transition-delay: 0.32s; }
+.reveal-armed .reveal-scale { transform: translateY(26px) scale(0.96); }
+.reveal-armed .reveal-scale.is-visible { transform: translateY(0) scale(1); }
+
+.card-hover { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s ease, background-color 0.35s ease, box-shadow 0.35s ease; }
+.card-hover:hover { transform: translateY(-4px); border-color: rgba(245,197,66, 0.55); box-shadow: 0 18px 44px rgba(245,197,66, 0.30), 0 0 0 1px rgba(245,197,66, 0.14); }
+.img-zoom { overflow: hidden; }
+.img-zoom img { transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
+.img-zoom:hover img { transform: scale(1.04); }
+
+/* Tilt + glow cards: --rx/--ry/--gx/--gy are set by a delegated pointer handler */
+.tilt {
+  position: relative; transform-style: preserve-3d;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.tilt::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0;
+  background: radial-gradient(340px circle at var(--gx, 50%) var(--gy, 50%), rgba(245,197,66, 0.26), rgba(255,215,0, 0.12) 42%, rgba(245,197,66, 0.08) 58%, transparent 70%);
+  transition: opacity 0.35s ease;
+}
+.tilt:hover::after { opacity: 1; }
+.tilt:hover { border-color: rgba(245,197,66, 0.55); box-shadow: 0 22px 50px rgba(245,197,66, 0.32), 0 0 32px rgba(245,197,66, 0.14); }
+/* Glow sweep across a card on hover */
+.sweep { position: relative; overflow: hidden; }
+.sweep::before {
+  content: ""; position: absolute; inset: -20% auto -20% -60%; width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(252,246,186, 0.20), transparent);
+  transform: translateX(-120%) skewX(-12deg); transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none; z-index: 1;
+}
+.sweep:hover::before { transform: translateX(340%) skewX(-12deg); }
+
+/* Magnetic buttons: JS moves the wrapper a few px toward the pointer */
+.magnetic { display: inline-flex; will-change: transform; transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
+.magnetic > * { will-change: transform; }
+
+/* Rolling / flip digits for the countdown */
+.digit-window { display: inline-block; overflow: hidden; height: 1.05em; line-height: 1.05; vertical-align: top; }
+.digit-roll { display: inline-block; animation: digit-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; will-change: transform; }
+@keyframes digit-in { from { transform: translateY(105%); opacity: 0.2; } to { transform: translateY(0); opacity: 1; } }
+
+/* Roll-text hover: the label rolls up into its duplicate */
+.roll { display: inline-block; overflow: hidden; vertical-align: top; }
+.roll-inner { display: flex; flex-direction: column; transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1); will-change: transform; }
+.roll:hover .roll-inner, a:hover .roll-inner, button:hover .roll-inner { transform: translateY(-50%); }
+
+/* Marquee: JS-driven track (see Marquee), wrapper skews with scroll velocity */
+.marquee { overflow: hidden; white-space: nowrap; }
+.marquee-skew { transform: skewX(calc(var(--sv, 0) * -7deg)); will-change: transform; }
+.marquee-track { display: inline-flex; width: max-content; will-change: transform; }
+.marquee-static { display: flex; flex-wrap: wrap; gap: 1.25rem; justify-content: center; }
+
+/* Preloader: CSS-only kill switch at 2.8s so it can never trap the page */
+.preloader { animation: preloader-kill 0.45s ease 2.8s forwards; }
+@keyframes preloader-kill { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+.preloader-bar { transition: width 0.12s linear; }
+.preloader-curtain { transition: transform 0.7s cubic-bezier(0.76, 0, 0.24, 1); will-change: transform; }
+.preloader.is-exiting .preloader-curtain-top { transform: translateY(-101%); }
+.preloader.is-exiting .preloader-curtain-bottom { transform: translateY(101%); }
+.preloader.is-exiting .preloader-content { opacity: 0; transform: translateY(-14px); transition: opacity 0.3s ease, transform 0.3s ease; }
+.preloader-content { transition: opacity 0.3s ease, transform 0.3s ease; }
+/* The preloader percentage is a numeral, not a highlighted word: keep it
+   upright and tabular in the Syne face so the rolling digits stay aligned. */
+.preloader .headline-gradient { font-style: normal; font-weight: 800; letter-spacing: -0.03em; }
+
+/* Page-transition wipe — diagonal bottom-right → top-left.
+   Each panel is clipped by one 4-point polygon: it starts collapsed to
+   the bottom-right corner, expands to the full viewport (its leading
+   edge travelling diagonally toward the top-left), then collapses to
+   the top-left corner on reveal, so the whole pass reads as a single
+   bottom-right → top-left diagonal. clip-path interpolation is
+   GPU-friendly; all four points stay percentage-based so the polygon
+   animates smoothly. The 0.46s duration plus the 60ms stagger on the
+   gold panel completes exactly when the view swaps (520ms). */
+.transition-overlay { pointer-events: none; }
+.transition-panel {
+  clip-path: polygon(100% 100%, 100% 100%, 100% 100%, 100% 100%);
+  transition: clip-path 0.46s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: clip-path;
+}
+.transition-panel.is-full { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); }
+.transition-panel.is-exit { clip-path: polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%); }
+.transition-label { transition: opacity 0.3s ease, letter-spacing 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* Scroll progress */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 110; pointer-events: none;
+  background: rgba(255,215,0, 0.18);
+}
+.scroll-progress-bar {
+  height: 100%; width: 100%; transform-origin: left center; transform: scaleX(var(--sp, 0));
+  background: linear-gradient(90deg, var(--accent), var(--molten-deep), var(--champagne), var(--rosegold));
+  box-shadow: 0 0 14px rgba(245,197,66, 0.7), 0 0 22px rgba(245,197,66, 0.35); will-change: transform;
+}
+
+/* Pinned horizontal showcase (desktop only; stacked on mobile) */
+.showcase-pin { position: relative; }
+@media (min-width: 900px) {
+  .showcase-pin { height: 300vh; }
+  .showcase-sticky { position: sticky; top: 0; height: 100vh; height: 100svh; display: flex; align-items: center; overflow: hidden; }
+  .showcase-track { display: flex; gap: 1.25rem; padding-left: max(1.5rem, calc((100vw - 72rem) / 2 + 1.5rem)); padding-right: 8vw; will-change: transform; }
+  .showcase-card { flex: 0 0 min(560px, 72vw); }
+}
+@media (max-width: 899px) {
+  .showcase-sticky { overflow: visible; }
+  .showcase-track { display: grid; gap: 1rem; padding: 0; transform: none !important; }
+  .showcase-card { flex: none; }
+}
+
+/* Footer wordmark: outline base + gradient fill that wipes in on scroll/hover.
+   Syne at 800 weight — loaded, so no weight is synthesised. */
+.wordmark { position: relative; font-weight: 600; letter-spacing: -0.03em; line-height: 0.9; }
+.wordmark-fill {
+  position: absolute; inset: 0; display: block;
+  background: linear-gradient(100deg, #AA771C, #BF953F 18%, #FFD700 32%, #F5C542 44%, #FCF6BA 50%, #F2EFE6 56%, #E8A87C 64%, #FFD700 78%, #AA771C);
+  background-size: 220% 100%;
+  animation: gold-shine 5.5s ease-in-out infinite;
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-stroke: 0;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.wordmark.is-visible .wordmark-fill, .wordmark:hover .wordmark-fill { clip-path: inset(0 0 0 0); }
+
+.starfield {
+  background-image:
+    radial-gradient(1px 1px at 12% 22%, #FCF6BA 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 32% 68%, #E8A87C 50%, transparent 51%),
+    radial-gradient(1px 1px at 52% 12%, #D8CBA6 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 68% 42%, #AA771C 50%, transparent 51%),
+    radial-gradient(1px 1px at 82% 78%, #FFFDF5 50%, transparent 51%),
+    radial-gradient(1px 1px at 90% 18%, #AA771C 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 22% 88%, #F5C542 50%, transparent 51%),
+    radial-gradient(1px 1px at 44% 52%, #FFD700 50%, transparent 51%);
+  background-size: 340px 340px;
+}
+.orbit-ring { border: 1px solid rgba(255,215,0, 0.45); border-radius: 9999px; }
+.orbit-ring-glow { border: 1px solid rgba(245,197,66, 0.60); box-shadow: 0 0 24px rgba(245,197,66, 0.22), 0 0 34px rgba(245,197,66, 0.28), inset 0 0 24px rgba(245,197,66, 0.18); }
+.orbit-spin { animation: orbit 26s linear infinite; }
+.orbit-spin-slow { animation: orbit 44s linear infinite reverse; }
+@keyframes orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.float-soft { animation: floaty 7s ease-in-out infinite; }
+@keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.hero-drift { animation: floaty 9s ease-in-out infinite; }
+.hero-tilt { transform: perspective(1100px) rotateX(calc(var(--py, 0) * -7deg)) rotateY(calc(var(--px, 0) * 9deg)); transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); will-change: transform; }
+.parallax-img { transform: scale(1.14) translateY(calc(var(--py, 0) * -22px)); will-change: transform; }
+
+.outline-word {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255,215,0, 0.45);
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  user-select: none;
+}
+.menu-overlay { animation: menu-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes menu-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.menu-item { opacity: 0; animation: menu-item-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards; animation-delay: var(--d, 0s); }
+@keyframes menu-item-in { from { opacity: 0; transform: translateY(34px); } to { opacity: 1; transform: translateY(0); } }
+.menu-link { transition: color 0.25s ease, letter-spacing 0.35s ease, transform 0.35s ease; }
+.menu-link:hover { color: var(--accent2); letter-spacing: -0.01em; transform: translateX(8px); }
+
+/* Arrow that slides on hover */
+.arrow-slide { display: inline-block; transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+a:hover .arrow-slide, button:hover .arrow-slide { transform: translateX(5px); }
+
+.cursor-dot, .cursor-ring, .cursor-label { display: none; }
+@media (pointer: fine) {
+  .cursor-dot {
+    display: block; position: fixed; z-index: 120; width: 8px; height: 8px;
+    margin: -4px 0 0 -4px; border-radius: 9999px; background: #fff;
+    pointer-events: none; mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    display: flex; align-items: center; justify-content: center;
+    position: fixed; z-index: 119; width: 36px; height: 36px;
+    margin: -18px 0 0 -18px; border-radius: 9999px; border: 1px solid rgba(255, 255, 255, 0.7);
+    pointer-events: none; mix-blend-mode: difference;
+    transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1), height 0.3s cubic-bezier(0.22, 1, 0.36, 1), margin 0.3s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s ease, border-color 0.3s ease;
+  }
+  .cursor-ring.is-hover { width: 56px; height: 56px; margin: -28px 0 0 -28px; }
+  .cursor-ring.is-label { width: 72px; height: 72px; margin: -36px 0 0 -36px; background: linear-gradient(120deg, rgba(245,197,66, 0.95), rgba(255,215,0, 0.95)); border-color: transparent; mix-blend-mode: normal; }
+  .cursor-label {
+    display: block; font-family: var(--font-letter); font-size: 10px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase; color: #0A0A0A; white-space: nowrap;
+  }
+  .cursor-ring.is-hidden, .cursor-dot.is-hidden { opacity: 0; }
+}
+
+input, select, textarea { color-scheme: dark; }
+input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--accent2); outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  .orbit-spin, .orbit-spin-slow, .float-soft, .hero-drift, .nebula::before, .nebula::after, .grain, .aurora-mesh, .headline-gradient, .glass-chip, .scroll-cue-line::after, .gold-sheen, .gold-flow, .nav-btn, .nav-btn.is-active, .planet-gold, .wordmark-fill, .aurora-ribbon, .cta-pulse-wrap::before { animation: none !important; }
+  .gold-dust, .aurora-ribbon { display: none !important; }
+  .cta-pulse-wrap::before { display: none !important; }
+  .light-divider::after { transform: scaleX(1) !important; transition: none !important; }
+  .reveal-armed .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .mask-line { transform: none !important; transition: none !important; }
+  .preloader { animation: preloader-kill 0.01ms ease 0.01ms forwards !important; }
+  .view-enter, .tab-enter, .menu-item { animation: none !important; opacity: 1 !important; }
+  .wordmark-fill { clip-path: inset(0 0 0 0) !important; }
+  .grain, .pointer-glow { display: none !important; }
+  /* Reduced motion un-pins the tracks showcase: the JS sideways transform
+     stays off under reduced motion, so the 300vh pin and the overflow-hidden
+     sticky frame must go too — otherwise cards 3 and 4 are trapped
+     off-screen in a frozen frame and can never be reached. Un-pinned, all
+     four cards wrap in normal flow and are reached by plain scrolling. */
+  .showcase-pin { height: auto !important; }
+  .showcase-sticky { position: static !important; height: auto !important; overflow: visible !important; display: block !important; }
+  .showcase-track { flex-wrap: wrap !important; transform: none !important; }
+  .showcase-card { flex: 1 1 300px !important; }
+}
+
+/* ---------- Premium refinement + scroll choreography (2026-11-05 edit) ----------
+   Colour: Black & Shining Gold v2 — true-black base, polished-metal gold
+   gradients (bronze → antique → bright gold → champagne → cool platinum →
+   rose-gold), champagne highlights, and a gold accent used sparingly. Deep
+   multi-stop gradients, luminous centres, gentler saturation, fine glass
+   with top-edge highlights. Motion: varied scroll reveals, hairline rules,
+   frame wipes, FAQ/tab/notice micro-transitions, hero zoom on scroll-away,
+   and a depth veil that deepens as the page scrolls. */
+
+:root {
+  --rosegold-soft: rgba(245,197,66, 0.45);
+  --rosegold-faint: rgba(245,197,66, 0.14);
+}
+
+body {
+  background:
+    radial-gradient(900px 520px at 50% -12%, rgba(245,197,66, 0.045), transparent 58%),
+    radial-gradient(1100px 620px at 88% -8%, rgba(245,197,66, 0.02), transparent 62%),
+    radial-gradient(900px 560px at -10% 18%, rgba(252,246,186, 0.05), transparent 60%),
+    radial-gradient(760px 520px at 104% 58%, rgba(255,215,0, 0.025), transparent 62%),
+    radial-gradient(820px 560px at -8% 82%, rgba(245,197,66, 0.025), transparent 60%),
+    linear-gradient(180deg, #030304 0%, #070708 30%, #0A0A0B 62%, #030304 100%);
+  background-attachment: fixed;
+}
+
+/* Finer glass: softer blur, brighter top-edge highlight, subtle inner glow. */
+.glass-chip {
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    inset 0 1px 0 rgba(252,246,186, 0.35),
+    inset 0 -8px 18px rgba(0,0,0, 0.35),
+    0 14px 34px rgba(0,0,0, 0.18),
+    0 0 26px rgba(255,215,0, 0.22);
+}
+.aurora-mesh { opacity: 0.15; filter: blur(30px) saturate(1.02); }
+@media (max-width: 640px) {
+  .aurora-horizon, .nebula::after { display: none; }
+  .aurora-mesh { opacity: 0.10; }
+  .nebula::before { opacity: 0.6; }
+  /* Phone hero darkness: the fixed body fields are viewport-relative, so
+     on a 390px-wide screen the 900px-wide champagne/gold radials cover
+     most of the hero and stack into an olive wash behind the chips, CTA
+     and countdown. Same geometry, roughly a third of the alpha, so the
+     phone hero reads near-black #030304 like the desktop hero. The
+     aurora ribbon (a rotated band crossing the tall phone hero at 38%)
+     is hidden on phones for the same reason the horizon already is. */
+  .aurora-ribbon { display: none; }
+  body {
+    background:
+      radial-gradient(900px 520px at 50% -12%, rgba(245,197,66, 0.015), transparent 58%),
+      radial-gradient(1100px 620px at 88% -8%, rgba(245,197,66, 0.008), transparent 62%),
+      radial-gradient(900px 560px at -10% 18%, rgba(252,246,186, 0.016), transparent 60%),
+      radial-gradient(760px 520px at 104% 58%, rgba(255,215,0, 0.008), transparent 62%),
+      radial-gradient(820px 560px at -8% 82%, rgba(245,197,66, 0.008), transparent 60%),
+      linear-gradient(180deg, #030304 0%, #070708 30%, #0A0A0B 62%, #030304 100%);
+  }
+}
+
+/* Depth veil: dusk nebula field that deepens progressively with --sp
+   (scroll progress, 0 at top → 1 at bottom, set by the scroll telemetry). */
+.depth-veil {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(720px 480px at 84% 88%, rgba(255,215,0, 0.015), transparent 62%),
+    radial-gradient(680px 460px at 6% 92%, rgba(245,197,66, 0.012), transparent 60%),
+    radial-gradient(900px 600px at 50% 108%, rgba(245,197,66, 0.015), transparent 60%);
+  opacity: calc(0.25 + var(--sp, 0) * 0.75);
+}
+
+/* Scroll reveal choreography: clip-path wipes, blur-to-sharp rises,
+   and slight-rotation settles — all on top of the base .reveal. */
+.reveal-armed .reveal {
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), clip-path 1s cubic-bezier(0.22, 1, 0.36, 1), filter 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-armed .reveal-wipe { clip-path: inset(0 38% 0 0); filter: blur(3px); transform: translateY(16px); }
+.reveal-armed .reveal-wipe.is-visible { clip-path: inset(0 0 0 0); filter: blur(0); transform: translateY(0); }
+.reveal-armed .reveal-blur { filter: blur(10px); transform: translateY(22px); }
+.reveal-armed .reveal-blur.is-visible { filter: blur(0); transform: translateY(0); }
+.reveal-armed .reveal-rotate { transform: translateY(30px) rotate(-1.4deg) scale(0.985); }
+.reveal-armed .reveal-rotate.is-visible { transform: translateY(0) rotate(0deg) scale(1); }
+.reveal-armed .reveal-frame { clip-path: inset(7% 7% 7% 7% round 8px); }
+.reveal-armed .reveal-frame.is-visible { clip-path: inset(0 0 0 0 round 8px); }
+
+/* Hairline rules that grow left→right as their section enters. */
+.rule-grow { height: 1px; max-width: 120px; background: linear-gradient(90deg, var(--rosegold), rgba(245,197,66, 0)); }
+.reveal-armed .rule-grow { opacity: 1; transform: scaleX(0); transform-origin: left center; }
+.reveal-armed .rule-grow.is-visible { opacity: 1; transform: scaleX(1); }
+
+/* Staggered entrances inside a group: children settle one after another. */
+.reveal-group > .reveal:nth-child(2) { transition-delay: 0.08s; }
+.reveal-group > .reveal:nth-child(3) { transition-delay: 0.16s; }
+.reveal-group > .reveal:nth-child(4) { transition-delay: 0.24s; }
+.reveal-group > .reveal:nth-child(5) { transition-delay: 0.32s; }
+.reveal-group > .reveal:nth-child(6) { transition-delay: 0.4s; }
+
+/* Hero zoom on scroll-away: --hz (0→1) is set from the real scroll container. */
+.hero-zoom { will-change: transform; transform: translate3d(0, calc(var(--hz, 0) * -28px), 0) scale(calc(1 + var(--hz, 0) * 0.045)); transform-origin: center top; }
+
+/* FAQ accordion: smooth grid-rows opening instead of a hard mount/unmount. */
+.faq-panel { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease; }
+.faq-panel.is-open { grid-template-rows: 1fr; opacity: 1; }
+.faq-panel > div { overflow: hidden; }
+
+/* Tab switches carry a soft blur-in; notices/toasts rise in gently. */
+@keyframes tab-in { from { opacity: 0; transform: translateY(14px); filter: blur(8px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+.notice-in { animation: notice-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes notice-in { from { opacity: 0; transform: translateY(10px) scale(0.98); filter: blur(4px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+
+/* Form focus glow + button press state (consistent micro-transitions). */
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent2);
+  box-shadow: 0 0 0 3px rgba(245,197,66, 0.55), 0 0 24px rgba(245,197,66, 0.18);
+}
+button:active:not(:disabled) { transform: scale(0.97); }
+
+/* Restrained vivid-coral accent: prize hairlines and small highlights only. */
+.rosegold-accent { color: var(--rosegold); }
+.hairline-gold { border-color: rgba(245,197,66, 0.45); }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-armed .reveal-wipe, .reveal-armed .reveal-blur, .reveal-armed .reveal-rotate, .reveal-armed .reveal-frame, .reveal-armed .rule-grow {
+    opacity: 1 !important; transform: none !important; clip-path: none !important; filter: none !important; transition: none !important;
+  }
+  .hero-zoom { transform: none !important; }
+  .depth-veil { display: none !important; }
+  .notice-in { animation: none !important; }
+}
+
+/* Black contrast surfaces (prize panel, menu overlay, footer):
+   champagne kickers and links stay readable on black ink. */
+.on-black .kicker { color: #FCF6BA; }
+.on-black .kicker::before { background: #FCF6BA; }
+.on-black .menu-link:hover { color: #FCF6BA; }
+
+/* ---------- Illusion transitions + stronger motion (2026-11-05 edit) ----------
+   Lettering is Syne (--font-letter) everywhere the old mono utility
+   face was used; Syne headlines and Inter body are unchanged by this
+   block, as is the Black & Shining Gold palette. Every effect here
+   is transform/opacity only, pauses off-screen, is disabled under
+   prefers-reduced-motion, and is reduced on touch / small screens. */
+
+/* Syne numerals keep stable tabular widths so countdown digits
+   never jitter as they roll. */
+.font-letter { font-variant-numeric: tabular-nums; }
+
+/* 3D perspective "unfold" reveals: sections/cards swing in on a
+   perspective plane (rotateX/rotateY) and settle flat. Applied via
+   cardCls and section wrappers; the base .reveal transition drives it. */
+.reveal-armed .reveal-unfold {
+  transform: perspective(1100px) rotateX(16deg) rotateY(-5deg) translateY(36px);
+  transform-origin: center top;
+}
+.reveal-armed .reveal-unfold.is-visible {
+  transform: perspective(1100px) rotateX(0deg) rotateY(0deg) translateY(0);
+}
+
+/* Per-letter 3D flip/roll-in for major headlines. Each letter is a
+   .letter-flip-char with its index in --i; the parent .letter-flip
+   gains .is-in from an IntersectionObserver (or from the preloader
+   boot flag on the hero), so letters roll up one after another. */
+.letter-flip { display: inline-block; }
+/* Word wrapper inside LetterFlip: atomic on the line so a headline can
+   only wrap at real spaces — never mid-word (the cut-off-font defect). */
+.letter-word { display: inline-block; white-space: nowrap; }
+.letter-flip-char {
+  display: inline-block;
+  transform: perspective(600px) rotateX(88deg) translateY(0.14em);
+  opacity: 0;
+  transform-origin: 50% 100%;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
+  transition-delay: calc(var(--i, 0) * 38ms);
+  will-change: transform, opacity;
+}
+.letter-flip.is-in .letter-flip-char {
+  transform: perspective(600px) rotateX(0deg) translateY(0);
+  opacity: 1;
+}
+
+/* Infinite-depth hero illusion: the three orbit rings (count unchanged)
+   slowly tilt in 3D, so the solar system reads as a turning volume
+   rather than a flat diagram. The starfield tunnel itself lives in
+   HeroCanvas (stars drift outward from the centre and fade at the
+   edges, looping forever). */
+.orbit-tilt-3d {
+  position: absolute; inset: 0;
+  transform-style: preserve-3d;
+  animation: orbit-tilt 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes orbit-tilt {
+  from { transform: perspective(900px) rotateX(9deg) rotateY(-11deg); }
+  50% { transform: perspective(900px) rotateX(-4deg) rotateY(9deg); }
+  to { transform: perspective(900px) rotateX(7deg) rotateY(-7deg); }
+}
+
+/* Holographic tilt glare: a gold light sheen whose position follows
+   the pointer (--gx, set by the delegated tilt handler) and sweeps
+   across a card's surface on hover. */
+.tilt::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0;
+  background: linear-gradient(105deg, transparent 18%, rgba(252,246,186, 0.22) 40%, rgba(255,215,0, 0.10) 50%, rgba(232,168,124, 0.18) 60%, transparent 82%);
+  background-size: 250% 100%;
+  background-position: var(--gx, 50%) 0;
+  transition: opacity 0.35s ease;
+  z-index: 1;
+}
+.tilt:hover::before { opacity: 1; }
+
+/* Cursor echo: faint trailing ghost rings behind the custom cursor
+   (fine-pointer devices only; positioned by CustomCursor's rAF loop). */
+.cursor-echo { display: none; }
+@media (pointer: fine) {
+  .cursor-echo {
+    display: block; position: fixed; z-index: 118;
+    border-radius: 9999px; border: 1px solid rgba(255, 255, 255, 0.28);
+    pointer-events: none; mix-blend-mode: difference;
+  }
+}
+
+/* Fine gold particle streaks riding the diagonal page-transition wipe.
+   They live inside the gold panel, so the panel's clip-path carries
+   them along the bottom-right → top-left pass; the panel geometry and
+   the 520ms swap timing are untouched. */
+.transition-streak {
+  position: absolute; width: 110px; height: 2px; border-radius: 9999px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, #FCF6BA, #FFD700, transparent);
+  box-shadow: 0 0 14px rgba(255,215,0, 0.8);
+  opacity: 0;
+  transform: rotate(-45deg) translateX(70px);
+  animation: streak-fly 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--d, 0s);
+}
+@keyframes streak-fly {
+  0% { opacity: 0; transform: rotate(-45deg) translateX(70px); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(-45deg) translateX(-90px); }
+}
+
+/* Second marquee row: same words, opposite direction, dimmer — the
+   counter-running rows read as two depths of the same stream. */
+.marquee-row-2 { opacity: 0.62; }
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-tilt-3d, .transition-streak { animation: none !important; }
+  .letter-flip-char { transform: none !important; opacity: 1 !important; transition: none !important; }
+  .reveal-armed .reveal-unfold { transform: none !important; }
+  .cursor-echo { display: none !important; }
+  .tilt::before { display: none !important; }
+}
+
+/* Heavy effects reduced on touch and small screens: the orbit tilt and
+   cursor echoes go away entirely; letter flips keep a shorter stagger. */
+@media (max-width: 640px), (pointer: coarse) {
+  .orbit-tilt-3d { animation: none !important; }
+  .cursor-echo { display: none !important; }
+  .letter-flip-char { transition-delay: calc(var(--i, 0) * 18ms); }
+  .gold-dust { display: none !important; }
+  .aurora-ribbon { animation: none !important; }
+  .nav-btn, .gold-flow, .gold-sheen { animation-duration: 4.6s; }
+}
+
+/* Poster acknowledgement (registration success screen): keep the dark
+   gold-framed poster intact when the participant saves or prints it
+   from their browser — colours are part of the design, not decoration. */
+.poster-card { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+
+/* =====================================================================
+   RESPONSIVE HARDENING — standalone edition (Windows · macOS · iOS ·
+   Android). Appended last so these rules win over earlier layers.
+   Goals: nothing overflows sideways on any phone (320px and up),
+   forms never trigger iOS auto-zoom, tap targets stay reachable,
+   media never stretches past its container, and notched devices
+   (iPhone / Android punch-hole) keep content clear of the edges.
+   ===================================================================== */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: clip;
+}
+body {
+  overflow-x: clip;
+  max-width: 100%;
+  -webkit-tap-highlight-color: rgba(245, 197, 66, 0.18);
+  overscroll-behavior-y: none;
+}
+img, video, canvas, svg, iframe {
+  max-width: 100%;
+}
+img, video { height: auto; }
+/* The prize photo keeps its natural ratio at every width. */
+img[src*="ipad"] { height: auto; object-fit: contain; }
+button, a, input, select, textarea, [role="button"] {
+  touch-action: manipulation;
+}
+* { overflow-wrap: break-word; }
+/* Long unbroken strings (team codes, e-mails, UTR references, links)
+   wrap instead of pushing the layout sideways. */
+code, .team-code, [class*="tracking-"] { overflow-wrap: anywhere; }
+/* Wide organizer lists / stat rows scroll inside their own box on
+   phones instead of widening the page. */
+.overflow-x-auto, [class*="overflow-x-auto"] { -webkit-overflow-scrolling: touch; }
+
+/* iOS Safari zooms the page when a focused field is under 16px.
+   Force 16px on touch/small screens — layout size is unchanged. */
+@media (max-width: 768px) {
+  input, select, textarea { font-size: 16px !important; }
+  /* Comfortable minimum tap targets on phones. */
+  button, [role="button"] { min-height: 40px; }
+  input, select, textarea { min-height: 44px; }
+  textarea { min-height: 96px; }
+}
+
+/* Small phones (<=400px: older iPhones, Galaxy Fold front screen). */
+@media (max-width: 400px) {
+  .countdown-tile { min-width: 54px !important; padding-left: 6px; padding-right: 6px; }
+  .showcase-card { flex: none; width: 100%; }
+}
+
+/* Notched devices: keep fixed header / progress / cursor layers and
+   page gutters clear of the notch and home indicator. */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+  .hatch-space-root { padding-bottom: max(0px, env(safe-area-inset-bottom, 0px)); }
+}
+
+/* Landscape phones: the desktop pinned showcase never engages below
+   900px wide, but keep hero content from being clipped by short
+   landscape viewports. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .showcase-sticky { position: static; height: auto; }
+}
+
+/* Windows high-contrast / forced-colors: keep gold accents legible
+   and focus rings visible instead of letting the OS palette wash
+   the dark theme out. */
+@media (forced-colors: active) {
+  * { forced-color-adjust: auto; }
+  button, a { border: 1px solid ButtonText; }
+}
+:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+
+/* Reduced data / very small heights: keep the preloader kill-switch
+   behaviour — content is never trapped behind an animation. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

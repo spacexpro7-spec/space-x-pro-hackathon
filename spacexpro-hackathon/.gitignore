@@ -1,0 +1,11 @@
+node_modules/
+.bun-cache/
+app.db
+app.db-wal
+app.db-shm
+client/dist/
+server/dist/
+*.tsbuildinfo
+.env
+.DS_Store
+Thumbs.db
